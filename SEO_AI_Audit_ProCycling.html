@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO AI Audit – Email Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0A0D16;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+  padding: 24px 12px;
+}
+
+.wrap { max-width: 660px; margin: 0 auto; }
+
+/* ─── CHROME ─── */
+.chrome {
+  background: #151921;
+  border-radius: 10px 10px 0 0;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.chrome-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+.chrome-label { flex: 1; text-align: center; font-size: 12px; color: #4B5563; }
+#skip-btn {
+  font-size: 11px; color: #4B5563;
+  background: transparent; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px; padding: 2px 9px; cursor: pointer;
+  font-family: inherit; transition: all 0.2s;
+}
+#skip-btn:hover { color: #94A3B8; border-color: rgba(255,255,255,0.25); }
+
+/* ─── META ─── */
+.meta {
+  background: #0E1219;
+  padding: 14px 26px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.meta-row { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
+.meta-row:last-child { margin-bottom: 0; }
+.ml { font-size: 10px; color: #4B5563; width: 36px; flex-shrink: 0; padding-top: 2px; font-weight: 700; }
+.mv { font-size: 13px; color: #94A3B8; line-height: 1.4; }
+.mv.b { color: #F1F5F9; font-weight: 600; }
+
+/* ─── BODY ─── */
+.body {
+  background: #070B12;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+}
+
+/* ─── HERO ─── */
+.hero {
+  padding: 52px 42px 40px;
+  background: linear-gradient(158deg, #070B12 0%, #130929 52%, #081527 100%);
+  position: relative;
+  overflow: hidden;
+}
+.orb {
+  position: absolute; border-radius: 50%; pointer-events: none;
+}
+.eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  color: #7C3AED; text-transform: uppercase; margin-bottom: 18px;
+}
+.h1 {
+  font-size: clamp(26px, 4.8vw, 38px); font-weight: 900;
+  color: #F1F5F9; line-height: 1.15; margin-bottom: 18px;
+}
+.h1 .purple { color: #A78BFA; }
+.hero-p { font-size: 15px; color: #94A3B8; line-height: 1.75; max-width: 480px; }
+
+/* ─── CHAT ─── */
+.chat-wrap { padding: 6px 42px 32px; }
+.chat-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 13px; padding: 22px;
+}
+.chat-hdr {
+  display: flex; align-items: center; gap: 8px;
+  padding-bottom: 13px; margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.gpt-icon {
+  width: 26px; height: 26px;
+  background: linear-gradient(135deg, #10a37f, #0c8b6d);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; flex-shrink: 0;
+}
+.chat-lbl { font-size: 12px; color: #4B5563; font-weight: 600; }
+.demo-badge {
+  margin-left: auto; font-size: 10px; color: #2D3748;
+  background: rgba(255,255,255,0.04); padding: 2px 8px; border-radius: 20px;
+}
+.user-row { display: flex; justify-content: flex-end; margin-bottom: 13px; }
+.user-bbl {
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.22);
+  border-radius: 12px 12px 2px 12px;
+  padding: 10px 15px; max-width: 85%;
+  font-size: 14px; color: #DDD6FE; line-height: 1.5;
+}
+.caret {
+  display: inline-block; width: 2px; height: 0.9em;
+  background: #A78BFA; margin-left: 2px; vertical-align: middle;
+  animation: blink 0.8s infinite;
+}
+.caret-g { background: #94A3B8; }
+.ai-row { display: flex; gap: 9px; align-items: flex-start; }
+.ai-badge {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, #10a37f, #0c8b6d);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: white; flex-shrink: 0;
+}
+.think-box {
+  display: flex; gap: 5px; align-items: center;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 2px 12px 12px 12px;
+}
+.td { width: 7px; height: 7px; border-radius: 50%; background: #4B5563; animation: tp 1.3s infinite; }
+.ai-txt-box {
+  background: rgba(255,255,255,0.04);
+  border-radius: 2px 12px 12px 12px;
+  padding: 11px 15px;
+  font-size: 14px; color: #94A3B8; line-height: 1.7; flex: 1;
+}
+.warn-box {
+  margin-top: 9px; padding: 10px 14px;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.22);
+  border-radius: 8px;
+  display: flex; align-items: center; gap: 8px;
+  animation: fadeUp 0.4s ease;
+}
+.warn-txt { font-size: 13px; color: #F87171; font-weight: 700; }
+
+/* ─── SECTIONS ─── */
+.sec { padding: 0 42px 32px; }
+.fade-s {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.fade-s.vis { opacity: 1; transform: translateY(0); }
+
+.bridge-txt {
+  font-size: 15px; color: #94A3B8; line-height: 1.85;
+  border-left: 3px solid #7C3AED; padding-left: 18px;
+}
+
+.case-card {
+  background: rgba(124,58,237,0.07);
+  border: 1px solid rgba(124,58,237,0.17);
+  border-radius: 12px; padding: 26px;
+}
+.case-hdr {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; margin-bottom: 14px;
+}
+.case-tag { font-size: 10px; letter-spacing: 3px; color: #7C3AED; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+.case-name { font-size: 21px; font-weight: 800; color: #F1F5F9; }
+.case-em { font-size: 28px; }
+.case-desc { font-size: 14px; color: #94A3B8; line-height: 1.8; margin-bottom: 18px; }
+.finding {
+  display: flex; gap: 11px; align-items: flex-start;
+  background: rgba(0,0,0,0.2); border-radius: 8px;
+  padding: 11px 14px; margin-bottom: 9px;
+}
+.finding:last-child { margin-bottom: 0; }
+.fi { font-size: 13px; flex-shrink: 0; margin-top: 2px; }
+.ft { font-size: 13px; font-weight: 600; color: #F1F5F9; margin-bottom: 3px; }
+.fd { font-size: 13px; color: #94A3B8; line-height: 1.6; }
+
+.offer-card {
+  background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(34,211,238,0.05));
+  border: 1px solid rgba(124,58,237,0.17);
+  border-radius: 12px; padding: 26px;
+}
+.offer-t { font-size: 16px; font-weight: 700; color: #F1F5F9; margin-bottom: 3px; }
+.offer-s { font-size: 12px; color: #4B5563; margin-bottom: 20px; }
+.oi { display: flex; gap: 11px; align-items: flex-start; margin-bottom: 11px; }
+.oi:last-child { margin-bottom: 0; }
+.oa { color: #7C3AED; font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.ot { font-size: 14px; color: #94A3B8; line-height: 1.5; }
+
+.cta-sec { padding: 4px 42px 52px; text-align: center; }
+.cta-h { font-size: 18px; font-weight: 800; color: #F1F5F9; margin-bottom: 8px; }
+.cta-s { font-size: 14px; color: #94A3B8; margin-bottom: 28px; }
+.cta-btn {
+  background: linear-gradient(135deg, #7C3AED, #4F46E5);
+  color: white; border: none; border-radius: 8px;
+  padding: 16px 48px; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 0 40px rgba(124,58,237,0.3), 0 4px 16px rgba(0,0,0,0.4);
+  letter-spacing: 0.3px;
+  text-decoration: none; display: inline-block;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 55px rgba(124,58,237,0.45), 0 8px 24px rgba(0,0,0,0.5);
+}
+.cta-n { font-size: 12px; color: #2D3748; margin-top: 14px; }
+
+.footer {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 18px 42px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer span { font-size: 12px; color: #4B5563; }
+
+.bot-note { padding: 12px 0; text-align: center; font-size: 11px; color: #2D3748; }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes tp { 0%,100%{opacity:.25;transform:scale(.8)} 50%{opacity:1;transform:scale(1)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="orb" style="top:-80px;left:-80px;width:380px;height:380px;background:radial-gradient(circle,rgba(124,58,237,0.12) 0%,transparent 65%)"></div>
+      <div class="orb" style="top:30px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(34,211,238,0.06) 0%,transparent 65%)"></div>
+      <div class="eyebrow">SEO AI Audit · Visibility</div>
+      <div class="h1">Zákazník hľadá<br>bicykel v AI.<br><span class="purple">Nájde Pro Cycling?</span></div>
+      <p class="hero-p">Rozhodovanie sa presúva do AI platforiem. Firmy, ktoré to nesledujú, prichádzajú o zákazníkov ešte predtým, než sa dostanú na ich web.</p>
+    </div>
+
+    <!-- CHAT DEMO -->
+    <div class="chat-wrap">
+      <div class="chat-box">
+        <div class="chat-hdr">
+          <div class="gpt-icon">✦</div>
+          <span class="chat-lbl">ChatGPT – simulovaný dopyt zákazníka</span>
+          <span class="demo-badge">demo</span>
+        </div>
+
+        <div class="user-row">
+          <div class="user-bbl">
+            <span id="tq"></span><span id="cq" class="caret"></span>
+          </div>
+        </div>
+
+        <div id="thinking" class="ai-row" style="display:none">
+          <div class="ai-badge">AI</div>
+          <div class="think-box">
+            <div class="td" style="animation-delay:0s"></div>
+            <div class="td" style="animation-delay:.22s"></div>
+            <div class="td" style="animation-delay:.44s"></div>
+          </div>
+        </div>
+
+        <div id="ai-row" class="ai-row" style="display:none">
+          <div class="ai-badge">AI</div>
+          <div style="flex:1">
+            <div class="ai-txt-box">
+              <span id="ta"></span><span id="ca" class="caret caret-g" style="display:none"></span>
+            </div>
+            <div id="warn" class="warn-box" style="display:none">
+              <span style="font-size:16px">⚠️</span>
+              <span class="warn-txt">Vaša značka v tejto odpovedi nie je.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BRIDGE -->
+    <div class="sec fade-s" id="fb" style="transition-delay:0s">
+      <p class="bridge-txt">Toto je realita každý deň, keď zákazníci hľadajú bicykel — a dá sa s tým niečo urobiť.</p>
+    </div>
+
+    <!-- CASE STUDY -->
+    <div class="sec fade-s" id="fc" style="transition-delay:.15s">
+      <div class="case-card">
+        <div class="case-hdr">
+          <div>
+            <div class="case-tag">Príklad z praxe</div>
+            <div class="case-name">Jednorazový AI Visibility Snapshot</div>
+          </div>
+          <span class="case-em">🏦</span>
+        </div>
+        <p class="case-desc">Zmapujeme, kde sa Pro Cycling aktuálne objavuje (a kde nie) v ChatGPT, Gemini a Perplexity — pri otázkach, ktoré zákazníci kladú pri kúpe bicykla.</p>
+        <div class="finding">
+          <span class="fi">🟡</span>
+          <div><div class="ft">Nerovnomerná prítomnosť</div><div class="fd">Značka bola silná pri niektorých produktoch — pri iných ju AI vôbec nespomínala</div></div>
+        </div>
+        <div class="finding">
+          <span class="fi">🔴</span>
+          <div><div class="ft">Konkurencia obsadila priestor</div><div class="fd">Pri kľúčových rozhodovacích otázkach AI odporúčalo výlučne iné banky</div></div>
+        </div>
+        <div class="finding">
+          <span class="fi">🟢</span>
+          <div><div class="ft">Viditeľnosť sa dá aktívne riadiť</div><div class="fd">S konkrétnymi prioritami sa dá systematicky pracovať na témach, kde chýbate</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELIVERABLES -->
+    <div class="sec fade-s" id="fo" style="transition-delay:.3s">
+      <div class="offer-card">
+        <div class="offer-t">Čo dostanete v AI SEO Audite</div>
+        <div class="offer-s">Jednorazová analýza · výsledky do 5 pracovných dní</div>
+        <div class="oi"><span class="oa">→</span><span class="ot">Kde sa vaša značka objavuje (a kde nie) v ChatGPT, Gemini a Perplexity</span></div>
+        <div class="oi"><span class="oa">→</span><span class="ot">Ako vás vníma AI pri rozhodovacích otázkach vašich zákazníkov</span></div>
+        <div class="oi"><span class="oa">→</span><span class="ot">Kde vás predbieha konkurencia v AI odpovediach</span></div>
+        <div class="oi"><span class="oa">→</span><span class="ot">Prioritizovaný akčný plán — čo riešiť ako prvé a prečo</span></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-sec fade-s" id="fk" style="transition-delay:.45s">
+      <div class="cta-h">Väčšina firiem to ešte nesleduje.</div>
+      <div class="cta-s">Nezáväzný 30-minútový hovor · zistíte, kde ste a kde nie ste.</div>
+      <a href="https://calendar.app.google/2MfiwUG7EuebR8TG6" class="cta-btn">Chcem vedieť, kde som v AI →</a>
+      <div class="cta-n">Alebo jednoducho odpovedzte na tento email.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const Q = "Kde kúpiť kvalitný cestný bicykel v Bratislave?";
+const A = "Kvalitný cestný bicykel v Bratislave nájdete v Cyklopoint, Bikefun alebo Rock Machine Store. Odporúčam navštíviť aj e-shop Cykloexpert.sk s širokým výberom značiek.";
+
+let timers = [], ivs = [];
+function later(fn, ms) { const t = setTimeout(fn, ms); timers.push(t); }
+function clear() { timers.forEach(clearTimeout); ivs.forEach(clearInterval); timers = []; ivs = []; }
+
+function revealContent() {
+  ['fb','fc','fo','fk'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('vis');
+  });
+  const btn = document.getElementById('skip-btn');
+  if (btn) btn.style.display = 'none';
+}
+
+function skipAnim() {
+  clear();
+  document.getElementById('tq').textContent = Q;
+  document.getElementById('cq').style.display = 'none';
+  document.getElementById('thinking').style.display = 'none';
+  document.getElementById('ai-row').style.display = 'flex';
+  document.getElementById('ta').textContent = A;
+  document.getElementById('ca').style.display = 'none';
+  document.getElementById('warn').style.display = 'flex';
+  revealContent();
+}
+
+function typeQuery() {
+  let i = 0;
+  document.getElementById('cq').style.display = 'inline-block';
+  const iv = setInterval(() => {
+    i++;
+    document.getElementById('tq').textContent = Q.slice(0, i);
+    if (i >= Q.length) {
+      clearInterval(iv);
+      document.getElementById('cq').style.display = 'none';
+      later(() => {
+        document.getElementById('thinking').style.display = 'flex';
+        later(() => {
+          document.getElementById('thinking').style.display = 'none';
+          typeAI();
+        }, 900);
+      }, 400);
+    }
+  }, 36);
+  ivs.push(iv);
+}
+
+function typeAI() {
+  document.getElementById('ai-row').style.display = 'flex';
+  const ca = document.getElementById('ca');
+  ca.style.display = 'inline-block';
+  let i = 0;
+  const iv = setInterval(() => {
+    i++;
+    document.getElementById('ta').textContent = A.slice(0, i);
+    if (i >= A.length) {
+      clearInterval(iv);
+      ca.style.display = 'none';
+      later(() => {
+        document.getElementById('warn').style.display = 'flex';
+        later(revealContent, 1100);
+      }, 400);
+    }
+  }, 18);
+  ivs.push(iv);
+}
+
+function restartAnim() {
+  clear();
+  document.getElementById('tq').textContent = '';
+  document.getElementById('cq').style.display = 'none';
+  document.getElementById('thinking').style.display = 'none';
+  document.getElementById('ai-row').style.display = 'none';
+  document.getElementById('ta').textContent = '';
+  document.getElementById('ca').style.display = 'none';
+  document.getElementById('warn').style.display = 'none';
+  ['fb','fc','fo','fk'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('vis');
+  });
+  const btn = document.getElementById('skip-btn');
+  if (btn) btn.style.display = '';
+  later(typeQuery, 600);
+}
+
+// Auto-start
+later(typeQuery, 600);
+</script>
+</body>
+</html>
